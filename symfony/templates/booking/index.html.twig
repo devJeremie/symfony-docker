@@ -1,0 +1,75 @@
+{% extends 'base.html.twig' %}
+{% block title %}Réservations - TravelDock{% endblock %}
+
+{% block body %}
+<div class="mx-auto max-w-7xl px-5 sm:px-8 py-10">
+
+  <!-- Header -->
+  <div class="mb-8">
+    <span class="text-amber font-semibold text-sm uppercase tracking-[0.18em]">Gestion</span>
+    <h1 class="font-display text-3xl sm:text-4xl font-bold tracking-tight mt-1">Réservations</h1>
+  </div>
+
+  {% if bookings is empty %}
+    <div class="flex flex-col items-center justify-center py-16 text-center bg-forestlt/30 rounded-3xl border border-forestlt">
+      <svg viewBox="0 0 24 24" class="w-10 h-10 text-forest/40 mb-3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M16 2v4M8 2v4M3 10h18"></path></svg>
+      <p class="text-forestdk/60 text-[15px]">Aucune réservation pour le moment.</p>
+    </div>
+  {% else %}
+
+  <div class="bg-white rounded-3xl shadow-soft border border-forestlt overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full text-[14px]">
+        <thead>
+          <tr class="bg-forestlt/60 text-forestdk/70 text-xs font-semibold uppercase tracking-wide">
+            <th class="px-5 py-4 text-left">#</th>
+            <th class="px-5 py-4 text-left">Client</th>
+            <th class="px-5 py-4 text-left">Voyage</th>
+            <th class="px-5 py-4 text-center">Personnes</th>
+            <th class="px-5 py-4 text-right">Total</th>
+            <th class="px-5 py-4 text-center">Statut</th>
+            <th class="px-5 py-4 text-left">Date</th>
+            <th class="px-5 py-4 text-center">Action</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-forestlt">
+          {% for booking in bookings %}
+          <tr class="hover:bg-forestlt/20 transition-colors">
+            <td class="px-5 py-4 text-forestdk/50 font-mono text-xs">#{{ booking.id }}</td>
+            <td class="px-5 py-4">
+              <p class="font-semibold text-forestdk">{{ booking.fullName }}</p>
+              <p class="text-xs text-forestdk/50 mt-0.5">{{ booking.email }}</p>
+            </td>
+            <td class="px-5 py-4">
+              <a href="{{ path('travel_show', {id: booking.travel.id}) }}" class="text-forest font-medium hover:underline">
+                {{ booking.travel.title }}
+              </a>
+            </td>
+            <td class="px-5 py-4 text-center text-forestdk/70">{{ booking.numberOfPersons }}</td>
+            <td class="px-5 py-4 text-right font-semibold text-forest">{{ booking.totalPrice }} €</td>
+            <td class="px-5 py-4 text-center">
+              <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold
+                {% if booking.status == 'confirmed' %}bg-forest/15 text-forest
+                {% elseif booking.status == 'pending' %}bg-amberlt text-amber
+                {% else %}bg-red-100 text-red-600{% endif %}">
+                {% if booking.status == 'confirmed' %}Confirmée
+                {% elseif booking.status == 'pending' %}En attente
+                {% else %}Annulée{% endif %}
+              </span>
+            </td>
+            <td class="px-5 py-4 text-forestdk/55 text-xs">{{ booking.bookedAt|date('d/m/Y H:i') }}</td>
+            <td class="px-5 py-4 text-center">
+              <a href="{{ path('booking_show', {id: booking.id}) }}" title="Voir" class="grid place-items-center w-8 h-8 rounded-xl bg-forestlt text-forest hover:bg-forest hover:text-white transition-colors mx-auto">
+                <svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+              </a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  {% endif %}
+
+</div>
+{% endblock %}

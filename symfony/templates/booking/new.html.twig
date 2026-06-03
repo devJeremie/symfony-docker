@@ -1,0 +1,149 @@
+{% extends 'base.html.twig' %}
+{% block title %}Réserver {{ travel.title }} - TravelDock{% endblock %}
+
+{% block body %}
+<div class="mx-auto max-w-7xl px-5 sm:px-8 py-10">
+
+  <!-- Breadcrumb -->
+  <nav class="flex items-center gap-2 text-sm text-forestdk/50 mb-8">
+    <a href="{{ path('travel_index') }}" class="hover:text-forest transition-colors">Voyages</a>
+    <svg viewBox="0 0 24 24" class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"></path></svg>
+    <a href="{{ path('travel_show', {id: travel.id}) }}" class="hover:text-forest transition-colors truncate max-w-[160px]">{{ travel.title }}</a>
+    <svg viewBox="0 0 24 24" class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"></path></svg>
+    <span class="text-forestdk font-medium">Réservation</span>
+  </nav>
+
+  <div class="mb-8">
+    <span class="text-amber font-semibold text-sm uppercase tracking-[0.18em]">Nouvelle réservation</span>
+    <h1 class="font-display text-3xl sm:text-4xl font-bold tracking-tight mt-1">{{ travel.title }}</h1>
+    <p class="mt-1 text-forestdk/55 flex items-center gap-1.5">
+      <svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0118 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+      {{ travel.destination }}
+    </p>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+    <!-- Form -->
+    <div class="lg:col-span-2">
+      <div class="bg-white rounded-3xl shadow-soft border border-forestlt p-6 sm:p-8">
+        <form action="{{ path('booking_new', {id: travel.id}) }}" method="post" class="space-y-5">
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div>
+              <label for="firstName" class="block text-sm font-semibold text-forestdk/70 mb-1.5">
+                Prénom <span class="text-red-400">*</span>
+              </label>
+              <input type="text" id="firstName" name="firstName" required
+                     class="w-full px-4 py-3 rounded-2xl border border-forestlt bg-white text-forestdk placeholder:text-forestdk/35 focus:outline-none focus:ring-2 focus:ring-forest/25 focus:border-forest transition text-[15px]">
+            </div>
+            <div>
+              <label for="lastName" class="block text-sm font-semibold text-forestdk/70 mb-1.5">
+                Nom <span class="text-red-400">*</span>
+              </label>
+              <input type="text" id="lastName" name="lastName" required
+                     class="w-full px-4 py-3 rounded-2xl border border-forestlt bg-white text-forestdk placeholder:text-forestdk/35 focus:outline-none focus:ring-2 focus:ring-forest/25 focus:border-forest transition text-[15px]">
+            </div>
+          </div>
+
+          <div>
+            <label for="email" class="block text-sm font-semibold text-forestdk/70 mb-1.5">
+              Email <span class="text-red-400">*</span>
+            </label>
+            <input type="email" id="email" name="email" required placeholder="vous@exemple.fr"
+                   class="w-full px-4 py-3 rounded-2xl border border-forestlt bg-white text-forestdk placeholder:text-forestdk/35 focus:outline-none focus:ring-2 focus:ring-forest/25 focus:border-forest transition text-[15px]">
+          </div>
+
+          <div>
+            <label for="phone" class="block text-sm font-semibold text-forestdk/70 mb-1.5">Téléphone</label>
+            <input type="tel" id="phone" name="phone" placeholder="06 12 34 56 78"
+                   class="w-full px-4 py-3 rounded-2xl border border-forestlt bg-white text-forestdk placeholder:text-forestdk/35 focus:outline-none focus:ring-2 focus:ring-forest/25 focus:border-forest transition text-[15px]">
+          </div>
+
+          <div>
+            <label for="numberOfPersons" class="block text-sm font-semibold text-forestdk/70 mb-1.5">
+              Nombre de personnes <span class="text-red-400">*</span>
+              <span class="text-forestdk/40 font-normal">(max {{ travel.availableSeats }} disponible(s))</span>
+            </label>
+            <input type="number" id="numberOfPersons" name="numberOfPersons"
+                   required min="1" max="{{ travel.availableSeats }}" value="1"
+                   class="w-full px-4 py-3 rounded-2xl border border-forestlt bg-white text-forestdk focus:outline-none focus:ring-2 focus:ring-forest/25 focus:border-forest transition text-[15px]">
+          </div>
+
+          <!-- Price preview -->
+          <div class="bg-forestlt/40 rounded-2xl border border-forestlt p-4 flex items-center justify-between gap-4">
+            <div class="text-sm text-forestdk/70">
+              <span class="font-semibold">{{ travel.price }} €</span> × <span id="personsLabel">1</span> personne(s)
+            </div>
+            <div class="text-right">
+              <p class="text-xs text-forestdk/45 mb-0.5">Total estimé</p>
+              <p class="font-display text-2xl font-bold text-forest leading-none">
+                <span id="totalPrice">{{ travel.price }}</span> €
+              </p>
+            </div>
+          </div>
+
+          <div class="pt-2">
+            <button type="submit" class="flex items-center justify-center gap-2 w-full px-6 py-3.5 rounded-full bg-amber text-white font-semibold text-[16px] shadow-lift hover:bg-[#a4660f] transition-colors">
+              <svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              Confirmer la réservation
+            </button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+
+    <!-- Summary sidebar -->
+    <div>
+      <div class="bg-white rounded-3xl border border-forestlt shadow-soft p-6 sticky top-24">
+        <h3 class="font-display font-bold text-lg mb-5">Récapitulatif</h3>
+
+        <div class="relative h-28 img-ph rounded-2xl overflow-hidden mb-5">
+          <div class="absolute inset-0 bg-gradient-to-t from-forestdk/60 to-transparent"></div>
+          <div class="absolute bottom-0 p-3">
+            <p class="text-white font-semibold text-sm">{{ travel.title }}</p>
+            <p class="text-white/70 text-xs">{{ travel.destination }}</p>
+          </div>
+        </div>
+
+        <div class="space-y-2.5 text-[14px]">
+          <div class="flex items-center gap-2 text-forestdk/65">
+            <svg viewBox="0 0 24 24" class="w-4 h-4 shrink-0 text-forest" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M16 2v4M8 2v4M3 10h18"></path></svg>
+            <span>{{ travel.departureDate|date('d/m/Y') }} → {{ travel.returnDate|date('d/m/Y') }}</span>
+          </div>
+          <div class="flex items-center gap-2 text-forestdk/65">
+            <svg viewBox="0 0 24 24" class="w-4 h-4 shrink-0 text-forest" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>
+            <span>{{ travel.duration }} jours</span>
+          </div>
+          <div class="flex items-center gap-2 text-forestdk/65">
+            <svg viewBox="0 0 24 24" class="w-4 h-4 shrink-0 text-amber" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
+            <span>{{ travel.availableSeats }} place(s) disponible(s)</span>
+          </div>
+        </div>
+
+        <div class="mt-5 pt-5 border-t border-forestlt text-center">
+          <p class="text-xs text-forestdk/45 mb-0.5">Prix par personne</p>
+          <p class="font-display text-3xl font-bold text-forest">{{ travel.price }}€</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% block javascripts %}
+<script>
+  const pricePerPerson = {{ travel.price }};
+  const input = document.getElementById('numberOfPersons');
+  const totalEl = document.getElementById('totalPrice');
+  const personsLabel = document.getElementById('personsLabel');
+
+  input.addEventListener('input', function () {
+    const n = parseInt(this.value) || 1;
+    personsLabel.textContent = n;
+    totalEl.textContent = (pricePerPerson * n).toFixed(2);
+  });
+</script>
+{% endblock %}
+{% endblock %}

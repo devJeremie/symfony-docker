@@ -1,0 +1,83 @@
+{% extends 'base.html.twig' %}
+{% block title %}Destinations - TravelDock{% endblock %}
+
+{% block body %}
+<div class="mx-auto max-w-7xl px-5 sm:px-8 py-10">
+
+  <!-- Header -->
+  <div class="flex flex-wrap items-center justify-between gap-4 mb-8">
+    <div>
+      <span class="text-amber font-semibold text-sm uppercase tracking-[0.18em]">Carte du monde</span>
+      <h1 class="font-display text-3xl sm:text-4xl font-bold tracking-tight mt-1">Destinations</h1>
+    </div>
+    <a href="{{ path('destination_new') }}" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-forest text-white font-semibold shadow-soft hover:bg-forestdk transition-colors text-[15px]">
+      <svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
+      Nouvelle destination
+    </a>
+  </div>
+
+  <!-- Search -->
+  <form method="get" class="mb-8">
+    <div class="flex gap-2 max-w-md">
+      <div class="relative flex-1">
+        <svg viewBox="0 0 24 24" class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-forestdk/40" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><path d="m21 21-4.3-4.3"></path></svg>
+        <input type="text" name="search" value="{{ search }}"
+               placeholder="Rechercher une destination..."
+               class="w-full pl-11 pr-4 py-3 rounded-2xl border border-forestlt bg-white text-forestdk placeholder:text-forestdk/35 focus:outline-none focus:ring-2 focus:ring-forest/25 focus:border-forest transition text-[15px]">
+      </div>
+      <button type="submit" class="inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-forest text-white font-semibold hover:bg-forestdk transition-colors text-[15px]">
+        Rechercher
+      </button>
+    </div>
+  </form>
+
+  {% if destinations is empty %}
+    <div class="flex flex-col items-center justify-center py-16 text-center bg-forestlt/30 rounded-3xl border border-forestlt">
+      <svg viewBox="0 0 24 24" class="w-10 h-10 text-forest/40 mb-3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0118 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+      <p class="text-forestdk/60 text-[15px]">Aucune destination trouvée.</p>
+    </div>
+  {% else %}
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+    {% for destination in destinations %}
+    <article class="fade-up bg-white rounded-3xl shadow-soft border border-forestlt overflow-hidden hover:shadow-lift transition-shadow group">
+      <!-- Image placeholder header -->
+      <div class="relative h-36 img-ph overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-t from-forestdk/60 to-transparent"></div>
+        <div class="absolute bottom-0 p-4 flex items-end justify-between w-full">
+          <div>
+            <h2 class="font-display text-white text-lg font-bold leading-tight">{{ destination.name }}</h2>
+            <p class="text-white/70 text-sm">{{ destination.country }}</p>
+          </div>
+          {% if destination.iataCode %}
+          <span class="shrink-0 px-2 py-0.5 rounded bg-white/20 text-white text-xs font-mono tracking-wider">{{ destination.iataCode }}</span>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="p-5">
+        {% if destination.description %}
+        <p class="text-forestdk/60 text-sm leading-relaxed mb-4 line-clamp-2">{{ destination.description|slice(0, 100) }}…</p>
+        {% endif %}
+
+        <div class="flex items-center justify-between">
+          <span class="flex items-center gap-1.5 text-xs text-forestdk/50">
+            <svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0118 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+            {{ destination.travels|length }} voyage(s)
+          </span>
+          <div class="flex items-center gap-2">
+            <a href="{{ path('destination_show', {id: destination.id}) }}" class="grid place-items-center w-8 h-8 rounded-xl bg-forestlt text-forest hover:bg-forest hover:text-white transition-colors">
+              <svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+            </a>
+            <a href="{{ path('destination_edit', {id: destination.id}) }}" class="grid place-items-center w-8 h-8 rounded-xl bg-amberlt text-amber hover:bg-amber hover:text-white transition-colors">
+              <svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+</div>
+{% endblock %}
