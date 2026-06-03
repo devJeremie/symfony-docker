@@ -32,6 +32,9 @@ class Destination
     #[ORM\Column(length: 10, nullable: true)]
     private ?string $iataCode = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $imageName = null;
+
     #[ORM\OneToMany(targetEntity: Travel::class, mappedBy: 'destination')]
     private Collection $travels;
 
@@ -88,6 +91,9 @@ class Destination
         $this->iataCode = $iataCode;
         return $this;
     }
+
+    public function getImageName(): ?string { return $this->imageName; }
+    public function setImageName(?string $imageName): static { $this->imageName = $imageName; return $this; }
 
     /**
      * @return Collection<int, Travel>

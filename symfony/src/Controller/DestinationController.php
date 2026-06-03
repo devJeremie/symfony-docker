@@ -43,6 +43,27 @@ class DestinationController extends AbstractController
         ]);
     }
 
+    private function handleImageUpload(Request $request, Destination $destination): void
+    {
+        $imageFile = $request->files->get('image');
+        if (!$imageFile || !$imageFile->isValid()) {
+            return;
+        }
+
+        $uploadDir = $this->getParameter('kernel.project_dir') . '/public/images/destinations/';
+
+        if ($destination->getImageName()) {
+            $oldFile = $uploadDir . $destination->getImageName();
+            if (file_exists($oldFile)) {
+                unlink($oldFile);
+            }
+        }
+
+        $newFilename = uniqid('dest-') . '.' . $imageFile->guessExtension();
+        $imageFile->move($uploadDir, $newFilename);
+        $destination->setImageName($newFilename);
+    }
+
     #[Route('/new', name: 'new', methods: ['GET', 'POST'])]
     public function new(Request $request): Response
     {
@@ -55,6 +76,8 @@ class DestinationController extends AbstractController
             $destination->setCountry($data['country'] ?? '');
             $destination->setDescription($data['description'] ?? null);
             $destination->setIataCode($data['iataCode'] ?? null);
+
+            $this->handleImageUpload($request, $destination);
 
             $this->entityManager->persist($destination);
             $this->entityManager->flush();
@@ -78,6 +101,8 @@ class DestinationController extends AbstractController
             $destination->setCountry($data['country'] ?? $destination->getCountry());
             $destination->setDescription($data['description'] ?? null);
             $destination->setIataCode($data['iataCode'] ?? null);
+
+            $this->handleImageUpload($request, $destination);
 
             $this->entityManager->flush();
 

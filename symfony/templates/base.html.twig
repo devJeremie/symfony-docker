@@ -51,14 +51,8 @@
   <!-- NAVBAR -->
   <header class="sticky top-0 z-50 bg-white/85 backdrop-blur-md border-b border-forestlt">
     <nav class="mx-auto max-w-7xl px-5 sm:px-8 h-[72px] flex items-center justify-between">
-      <a href="{{ path('app_home') }}" class="flex items-center gap-2.5">
-        <span class="grid place-items-center w-10 h-10 rounded-xl bg-forest text-white shadow-soft">
-          <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="9"></circle>
-            <polygon points="16.5 7.5 13.5 13.5 7.5 16.5 10.5 10.5 16.5 7.5" fill="currentColor" stroke="none"></polygon>
-          </svg>
-        </span>
-        <span class="font-display text-[22px] font-bold tracking-tight text-forestdk">Travel<span class="text-amber">Dock</span></span>
+      <a href="{{ path('app_home') }}" aria-label="TravelDock — accueil">
+        <img src="{{ asset('images/logo.png') }}" alt="TravelDock" class="h-10 w-auto">
       </a>
 
       <ul class="hidden md:flex items-center gap-8 text-[15px] font-medium text-forestdk/80">
@@ -118,14 +112,25 @@
     <div class="mx-auto max-w-7xl px-5 sm:px-8 py-16">
       <div class="grid grid-cols-2 md:grid-cols-4 gap-10">
         <div class="col-span-2">
-          <a href="{{ path('app_home') }}" class="flex items-center gap-2.5">
-            <span class="grid place-items-center w-10 h-10 rounded-xl bg-white/10 text-white">
-              <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="9"></circle>
-                <polygon points="16.5 7.5 13.5 13.5 7.5 16.5 10.5 10.5 16.5 7.5" fill="currentColor" stroke="none"></polygon>
-              </svg>
-            </span>
-            <span class="font-display text-[22px] font-bold tracking-tight">Travel<span class="text-amber">Dock</span></span>
+          <a href="{{ path('app_home') }}" class="flex items-center" aria-label="TravelDock — accueil">
+            <svg viewBox="0 0 188 48" fill="none" xmlns="http://www.w3.org/2000/svg" class="h-[42px] w-auto">
+              <!-- Badge translucide sur fond sombre -->
+              <rect x="4" y="4" width="40" height="40" rx="11" fill="white" fill-opacity="0.10"/>
+              <rect x="4" y="4" width="40" height="20" rx="11" fill="white" fill-opacity="0.06"/>
+              <circle cx="24" cy="24" r="13" stroke="white" stroke-opacity="0.15" stroke-width="1" fill="none"/>
+              <!-- Aiguille N-S -->
+              <path d="M24 10 L28.5 24 L19.5 24 Z" fill="white"/>
+              <path d="M24 38 L28.5 24 L19.5 24 Z" fill="#F0B429" fill-opacity="0.80"/>
+              <!-- Axe E-O -->
+              <path d="M10 24 L24 20.5 L38 24 L24 27.5 Z" fill="white" fill-opacity="0.18"/>
+              <!-- Pivot central -->
+              <circle cx="24" cy="24" r="3" fill="#BA7517"/>
+              <circle cx="24" cy="24" r="1.5" fill="white" fill-opacity="0.55"/>
+              <!-- Texte footer : Travel=blanc, Dock=amber -->
+              <text y="33" font-family="'Bricolage Grotesque',system-ui,sans-serif" font-weight="800" font-size="23" letter-spacing="-0.6">
+                <tspan x="56" fill="white">Travel</tspan><tspan fill="#BA7517">Dock</tspan>
+              </text>
+            </svg>
           </a>
           <p class="mt-4 text-white/55 text-[15px] leading-relaxed max-w-xs">Application de gestion de voyages construite avec Symfony 7 & PHP 8.3.</p>
         </div>

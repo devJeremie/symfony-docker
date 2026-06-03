@@ -49,6 +49,9 @@ class Travel
     #[ORM\Column(length: 30, nullable: true)]
     private ?string $category = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $imageName = null;
+
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $createdAt = null;
 
@@ -158,6 +161,9 @@ class Travel
         $this->category = $category;
         return $this;
     }
+
+    public function getImageName(): ?string { return $this->imageName; }
+    public function setImageName(?string $imageName): static { $this->imageName = $imageName; return $this; }
 
     public function getCreatedAt(): ?\DateTimeInterface
     {

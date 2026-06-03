@@ -37,6 +37,27 @@ class TravelController extends AbstractController
         ]);
     }
 
+    private function handleImageUpload(Request $request, Travel $travel): void
+    {
+        $imageFile = $request->files->get('image');
+        if (!$imageFile || !$imageFile->isValid()) {
+            return;
+        }
+
+        $uploadDir = $this->getParameter('kernel.project_dir') . '/public/images/travels/';
+
+        if ($travel->getImageName()) {
+            $oldFile = $uploadDir . $travel->getImageName();
+            if (file_exists($oldFile)) {
+                unlink($oldFile);
+            }
+        }
+
+        $newFilename = uniqid('travel-') . '.' . $imageFile->guessExtension();
+        $imageFile->move($uploadDir, $newFilename);
+        $travel->setImageName($newFilename);
+    }
+
     #[Route('/new', name: 'new', methods: ['GET', 'POST'])]
     public function new(Request $request, DestinationRepository $destinationRepository): Response
     {
@@ -63,6 +84,8 @@ class TravelController extends AbstractController
             if ($destination) {
                 $travel->setDestination($destination);
             }
+
+            $this->handleImageUpload($request, $travel);
 
             $this->entityManager->persist($travel);
             $this->entityManager->flush();
@@ -102,6 +125,8 @@ class TravelController extends AbstractController
             if ($destination) {
                 $travel->setDestination($destination);
             }
+
+            $this->handleImageUpload($request, $travel);
 
             $this->entityManager->flush();
 
